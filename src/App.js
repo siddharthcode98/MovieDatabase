@@ -1,25 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import { Component } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { Switch, Route } from "react-router-dom";
+
+import "./App.css";
+import Header from "./components/Header";
+import Popular from "./components/Popular";
+import TopRated from "./components/TopRated";
+import Upcoming from "./components/UpComing";
+import Footer from "./components/Footer";
+import Context from "./context/Context";
+
+// write your code here
+class App extends Component {
+  state = { searchMovieList: [], isSearch: false };
+
+  changeSearchStatus = () => {
+    this.setState((prevState) => ({
+      isSearch: !prevState.isSearch,
+    }));
+  };
+  updateMovieList = (movieList) => {
+    this.setState({ searchMovieList: movieList });
+  };
+
+  render() {
+    const { searchMovieList, isSearch } = this.state;
+    console.log(searchMovieList);
+    return (
+      <Context.Provider
+        value={{
+          searchMovieList,
+          isSearch,
+          changeSearchStatus: this.changeSearchStatus,
+          updateMovieList: this.updateMovieList,
+        }}
+      >
+        <main className="main-container">
+          <Header />
+          <Switch>
+            <Route exact path="/" component={Popular} />
+            <Route exact path="/top-rated" component={TopRated} />
+            <Route exact path="/upcoming" component={Upcoming} />
+          </Switch>
+          <Footer />
+        </main>
+      </Context.Provider>
+    );
+  }
 }
 
 export default App;
