@@ -10,30 +10,58 @@ import Upcoming from "./components/UpComing";
 import Footer from "./components/Footer";
 import Context from "./context/Context";
 import SingleMovieDetails from "./components/SingleMovieDetails";
+import SearchMoviesDetails from "./components/SearchMoviesDetails";
 
 // write your code here
 class App extends Component {
-  state = { searchMovieList: [], isSearch: false };
+  state = { search: "", currentPage: 1, searchList: [], loading: true };
 
-  changeSearchStatus = () => {
-    this.setState((prevState) => ({
-      isSearch: !prevState.isSearch,
+  componentDidMount() {
+    this.getSearchMovies();
+  }
+  caseConvert = (arr) => {
+    return arr.map((item) => ({
+      id: item.id,
+      posterPath: item.poster_path,
+      title: item.title,
+      voteAverage: item.vote_average,
     }));
   };
-  updateMovieList = (movieList) => {
-    this.setState({ searchMovieList: movieList });
+
+  getSearchMovies = async () => {
+    const { currentPage, search } = this.state;
+    const PopularApi = `https://api.themoviedb.org/3/search/movie?api_key=98ccf2ec8c8db509095bed7dceca517d&language=en-US&query=${search}&page=${currentPage}`;
+    const response = await fetch(PopularApi);
+    if (response.ok === true) {
+      const dataObj = await response.json();
+      const modifiedMovieList = this.caseConvert(dataObj.results);
+      this.setState((prevState) => ({
+        searchList: modifiedMovieList,
+        search: "",
+        loading: !prevState.loading,
+      }));
+    }
+  };
+
+  searchFn = (query) => {
+    this.setState(
+      (prevState) => ({ search: query, loading: !prevState.loading }),
+      this.getSearchMovies
+    );
   };
 
   render() {
-    const { searchMovieList, isSearch } = this.state;
-    console.log(searchMovieList);
+    const { search, searchList, loading, currentPage } = this.state;
+    // console.log(search);
+    // console.log(searchList);
     return (
       <Context.Provider
         value={{
-          searchMovieList,
-          isSearch,
-          changeSearchStatus: this.changeSearchStatus,
-          updateMovieList: this.updateMovieList,
+          search,
+          loading,
+          currentPage,
+          searchList,
+          searchFn: this.searchFn,
         }}
       >
         <main className="main-container">
@@ -43,6 +71,7 @@ class App extends Component {
             <Route exact path="/top-rated" component={TopRated} />
             <Route exact path="/upcoming" component={Upcoming} />
             <Route exact path="/movie/:id" component={SingleMovieDetails} />
+            <Route exact path="/search" component={SearchMoviesDetails} />
           </Switch>
           <Footer />
         </main>

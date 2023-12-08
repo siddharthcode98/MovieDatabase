@@ -1,9 +1,11 @@
 import React from "react";
 const Context = React.createContext({
-  searchMovieList: [],
-  updateMovieList: () => {},
-  isSearch: false,
-  changeSearchStatus: () => {},
+  search: "",
+  searchfn: () => {},
+  searchList: [],
+  loading: true,
+  currentPage: 1,
+  turnPage: () => {},
 });
 
 export default Context;
