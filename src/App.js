@@ -9,6 +9,7 @@ import TopRated from "./components/TopRated";
 import Upcoming from "./components/UpComing";
 import Footer from "./components/Footer";
 import Context from "./context/Context";
+import SingleMovieDetails from "./components/SingleMovieDetails";
 
 // write your code here
 class App extends Component {
@@ -41,6 +42,7 @@ class App extends Component {
             <Route exact path="/" component={Popular} />
             <Route exact path="/top-rated" component={TopRated} />
             <Route exact path="/upcoming" component={Upcoming} />
+            <Route exact path="/movie/:id" component={SingleMovieDetails} />
           </Switch>
           <Footer />
         </main>

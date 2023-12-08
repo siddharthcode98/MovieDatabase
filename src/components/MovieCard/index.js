@@ -1,10 +1,12 @@
+import { Link } from "react-router-dom";
+
 import "./index.css";
 
 import { IoStarSharp } from "react-icons/io5";
 
 const MovieCard = (props) => {
   const { details } = props;
-  const { posterPath, title, voteAverage } = details;
+  const { id, posterPath, title, voteAverage } = details;
   const rating = Math.round(voteAverage);
   return (
     <li className="movie">
@@ -17,7 +19,9 @@ const MovieCard = (props) => {
       <p>
         rating: {rating} <IoStarSharp color={"yellow"} />
       </p>
-      <button className="view-details">View Details</button>
+      <Link to={`/movie/${id}`}>
+        <button className="view-details">View Details</button>
+      </Link>
     </li>
   );
 };

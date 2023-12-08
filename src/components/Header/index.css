@@ -1,5 +1,6 @@
 .header {
   background-color: #1c1d21;
+  min-height: 8vh;
 }
 .nav-bar {
   display: flex;
